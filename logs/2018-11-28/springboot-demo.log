@@ -1,0 +1,79 @@
+2018-11-28 17:10:23,728:DEBUG http-nio-8090-exec-4 (BaseJdbcLogger.java:159) - ==>  Preparing: SELECT id,user_id,user_name,password,nick_name,phone,email,create_time,update_time,create_by,update_by,remarks,is_valid FROM user WHERE id = ? 
+2018-11-28 17:10:23,752:DEBUG http-nio-8090-exec-4 (BaseJdbcLogger.java:159) - ==> Parameters: 1(Integer)
+2018-11-28 17:10:23,894:TRACE http-nio-8090-exec-4 (BaseJdbcLogger.java:165) - <==    Columns: id, user_id, user_name, password, nick_name, phone, email, create_time, update_time, create_by, update_by, remarks, is_valid
+2018-11-28 17:10:23,895:TRACE http-nio-8090-exec-4 (BaseJdbcLogger.java:165) - <==        Row: 1, 111, 11, null, 232fds, null, null, 2018-11-12 15:13:55.0, null, null, null, null, 1
+2018-11-28 17:10:23,897:DEBUG http-nio-8090-exec-4 (BaseJdbcLogger.java:159) - <==      Total: 1
+2018-11-28 17:10:23,904:DEBUG http-nio-8090-exec-4 (BaseJdbcLogger.java:159) - ==>  Preparing: SELECT id, user_id, user_name, nick_name, phone, email, create_time FROM user WHERE (is_valid = 1) 
+2018-11-28 17:10:23,905:DEBUG http-nio-8090-exec-4 (BaseJdbcLogger.java:159) - ==> Parameters: 
+2018-11-28 17:10:23,907:TRACE http-nio-8090-exec-4 (BaseJdbcLogger.java:165) - <==    Columns: id, user_id, user_name, nick_name, phone, email, create_time
+2018-11-28 17:10:23,907:TRACE http-nio-8090-exec-4 (BaseJdbcLogger.java:165) - <==        Row: 1, 111, 11, 232fds, null, null, 2018-11-12 15:13:55.0
+2018-11-28 17:10:23,909:TRACE http-nio-8090-exec-4 (BaseJdbcLogger.java:165) - <==        Row: 2, 22, 22, 22dds, null, null, 2018-11-12 15:14:21.0
+2018-11-28 17:10:23,910:TRACE http-nio-8090-exec-4 (BaseJdbcLogger.java:165) - <==        Row: 3, 111, 1, 11, null, null, 2018-11-20 17:28:09.0
+2018-11-28 17:10:23,910:DEBUG http-nio-8090-exec-4 (BaseJdbcLogger.java:159) - <==      Total: 3
+2018-11-28 17:10:23,911:DEBUG http-nio-8090-exec-4 (BaseJdbcLogger.java:159) - ==>  Preparing: SELECT id, user_id, user_name, nick_name, phone, email, create_time FROM user WHERE (is_valid = 1) 
+2018-11-28 17:10:23,911:DEBUG http-nio-8090-exec-4 (BaseJdbcLogger.java:159) - ==> Parameters: 
+2018-11-28 17:10:23,912:TRACE http-nio-8090-exec-4 (BaseJdbcLogger.java:165) - <==    Columns: id, user_id, user_name, nick_name, phone, email, create_time
+2018-11-28 17:10:23,913:TRACE http-nio-8090-exec-4 (BaseJdbcLogger.java:165) - <==        Row: 1, 111, 11, 232fds, null, null, 2018-11-12 15:13:55.0
+2018-11-28 17:10:23,914:TRACE http-nio-8090-exec-4 (BaseJdbcLogger.java:165) - <==        Row: 2, 22, 22, 22dds, null, null, 2018-11-12 15:14:21.0
+2018-11-28 17:10:23,914:TRACE http-nio-8090-exec-4 (BaseJdbcLogger.java:165) - <==        Row: 3, 111, 1, 11, null, null, 2018-11-20 17:28:09.0
+2018-11-28 17:10:23,915:DEBUG http-nio-8090-exec-4 (BaseJdbcLogger.java:159) - <==      Total: 3
+2018-11-28 17:10:23,915:DEBUG http-nio-8090-exec-4 (BaseJdbcLogger.java:159) - ==>  Preparing: SELECT id, user_id, user_name, nick_name, phone, email, create_time FROM user WHERE (is_valid = 1 AND user_id = ?) 
+2018-11-28 17:10:23,916:DEBUG http-nio-8090-exec-4 (BaseJdbcLogger.java:159) - ==> Parameters: 111(String)
+2018-11-28 17:10:23,919:TRACE http-nio-8090-exec-4 (BaseJdbcLogger.java:165) - <==    Columns: id, user_id, user_name, nick_name, phone, email, create_time
+2018-11-28 17:10:23,919:TRACE http-nio-8090-exec-4 (BaseJdbcLogger.java:165) - <==        Row: 1, 111, 11, 232fds, null, null, 2018-11-12 15:13:55.0
+2018-11-28 17:10:23,920:TRACE http-nio-8090-exec-4 (BaseJdbcLogger.java:165) - <==        Row: 3, 111, 1, 11, null, null, 2018-11-20 17:28:09.0
+2018-11-28 17:10:23,921:DEBUG http-nio-8090-exec-4 (BaseJdbcLogger.java:159) - <==      Total: 2
+2018-11-28 17:10:23,922:DEBUG http-nio-8090-exec-4 (BaseJdbcLogger.java:159) - ==>  Preparing: select * from user where user_id = ? 
+2018-11-28 17:10:23,922:DEBUG http-nio-8090-exec-4 (BaseJdbcLogger.java:159) - ==> Parameters: 111(String)
+2018-11-28 17:10:23,924:TRACE http-nio-8090-exec-4 (BaseJdbcLogger.java:165) - <==    Columns: id, user_id, user_name, password, nick_name, phone, email, create_time, update_time, create_by, update_by, remarks, is_valid
+2018-11-28 17:10:23,924:TRACE http-nio-8090-exec-4 (BaseJdbcLogger.java:165) - <==        Row: 1, 111, 11, null, 232fds, null, null, 2018-11-12 15:13:55.0, null, null, null, null, 1
+2018-11-28 17:10:23,925:TRACE http-nio-8090-exec-4 (BaseJdbcLogger.java:165) - <==        Row: 3, 111, 1, null, 11, null, null, 2018-11-20 17:28:09.0, null, null, null, null, 1
+2018-11-28 17:10:23,926:DEBUG http-nio-8090-exec-4 (BaseJdbcLogger.java:159) - <==      Total: 2
+2018-11-28 17:31:11,065:DEBUG http-nio-8090-exec-9 (BaseJdbcLogger.java:159) - ==>  Preparing: SELECT count(0) FROM user 
+2018-11-28 17:31:11,091:DEBUG http-nio-8090-exec-9 (BaseJdbcLogger.java:159) - ==> Parameters: 
+2018-11-28 17:31:11,110:TRACE http-nio-8090-exec-9 (BaseJdbcLogger.java:165) - <==    Columns: count(0)
+2018-11-28 17:31:11,110:TRACE http-nio-8090-exec-9 (BaseJdbcLogger.java:165) - <==        Row: 3
+2018-11-28 17:31:11,112:DEBUG http-nio-8090-exec-9 (BaseJdbcLogger.java:159) - <==      Total: 1
+2018-11-28 17:31:11,115:DEBUG http-nio-8090-exec-9 (BaseJdbcLogger.java:159) - ==>  Preparing: SELECT id,user_id,user_name,password,nick_name,phone,email,create_time,update_time,create_by,update_by,remarks,is_valid FROM user LIMIT ? 
+2018-11-28 17:31:11,116:DEBUG http-nio-8090-exec-9 (BaseJdbcLogger.java:159) - ==> Parameters: 10(Integer)
+2018-11-28 17:31:11,118:TRACE http-nio-8090-exec-9 (BaseJdbcLogger.java:165) - <==    Columns: id, user_id, user_name, password, nick_name, phone, email, create_time, update_time, create_by, update_by, remarks, is_valid
+2018-11-28 17:31:11,118:TRACE http-nio-8090-exec-9 (BaseJdbcLogger.java:165) - <==        Row: 1, 111, 11, null, 232fds, null, null, 2018-11-12 15:13:55.0, null, null, null, null, 1
+2018-11-28 17:31:11,120:TRACE http-nio-8090-exec-9 (BaseJdbcLogger.java:165) - <==        Row: 2, 22, 22, null, 22dds, null, null, 2018-11-12 15:14:21.0, null, null, null, null, 1
+2018-11-28 17:31:11,122:TRACE http-nio-8090-exec-9 (BaseJdbcLogger.java:165) - <==        Row: 3, 111, 1, null, 11, null, null, 2018-11-20 17:28:09.0, null, null, null, null, 1
+2018-11-28 17:31:11,123:DEBUG http-nio-8090-exec-9 (BaseJdbcLogger.java:159) - <==      Total: 3
+2018-11-28 17:32:02,516:DEBUG http-nio-8090-exec-8 (BaseJdbcLogger.java:159) - ==>  Preparing: SELECT id,user_id,user_name,password,nick_name,phone,email,create_time,update_time,create_by,update_by,remarks,is_valid FROM user WHERE id = ? 
+2018-11-28 17:32:02,517:DEBUG http-nio-8090-exec-8 (BaseJdbcLogger.java:159) - ==> Parameters: 1(Integer)
+2018-11-28 17:32:02,518:TRACE http-nio-8090-exec-8 (BaseJdbcLogger.java:165) - <==    Columns: id, user_id, user_name, password, nick_name, phone, email, create_time, update_time, create_by, update_by, remarks, is_valid
+2018-11-28 17:32:02,519:TRACE http-nio-8090-exec-8 (BaseJdbcLogger.java:165) - <==        Row: 1, 111, 11, null, 232fds, null, null, 2018-11-12 15:13:55.0, null, null, null, null, 1
+2018-11-28 17:32:02,520:DEBUG http-nio-8090-exec-8 (BaseJdbcLogger.java:159) - <==      Total: 1
+2018-11-28 17:32:02,525:DEBUG http-nio-8090-exec-8 (BaseJdbcLogger.java:159) - ==>  Preparing: SELECT id, user_id, user_name, nick_name, phone, email, create_time FROM user WHERE (is_valid = 1) 
+2018-11-28 17:32:02,526:DEBUG http-nio-8090-exec-8 (BaseJdbcLogger.java:159) - ==> Parameters: 
+2018-11-28 17:32:02,527:TRACE http-nio-8090-exec-8 (BaseJdbcLogger.java:165) - <==    Columns: id, user_id, user_name, nick_name, phone, email, create_time
+2018-11-28 17:32:02,528:TRACE http-nio-8090-exec-8 (BaseJdbcLogger.java:165) - <==        Row: 1, 111, 11, 232fds, null, null, 2018-11-12 15:13:55.0
+2018-11-28 17:32:02,529:TRACE http-nio-8090-exec-8 (BaseJdbcLogger.java:165) - <==        Row: 2, 22, 22, 22dds, null, null, 2018-11-12 15:14:21.0
+2018-11-28 17:32:02,529:TRACE http-nio-8090-exec-8 (BaseJdbcLogger.java:165) - <==        Row: 3, 111, 1, 11, null, null, 2018-11-20 17:28:09.0
+2018-11-28 17:32:02,530:DEBUG http-nio-8090-exec-8 (BaseJdbcLogger.java:159) - <==      Total: 3
+2018-11-28 17:32:02,531:DEBUG http-nio-8090-exec-8 (BaseJdbcLogger.java:159) - ==>  Preparing: SELECT id, user_id, user_name, nick_name, phone, email, create_time FROM user WHERE (is_valid = 1) 
+2018-11-28 17:32:02,532:DEBUG http-nio-8090-exec-8 (BaseJdbcLogger.java:159) - ==> Parameters: 
+2018-11-28 17:32:02,534:TRACE http-nio-8090-exec-8 (BaseJdbcLogger.java:165) - <==    Columns: id, user_id, user_name, nick_name, phone, email, create_time
+2018-11-28 17:32:02,535:TRACE http-nio-8090-exec-8 (BaseJdbcLogger.java:165) - <==        Row: 1, 111, 11, 232fds, null, null, 2018-11-12 15:13:55.0
+2018-11-28 17:32:02,537:TRACE http-nio-8090-exec-8 (BaseJdbcLogger.java:165) - <==        Row: 2, 22, 22, 22dds, null, null, 2018-11-12 15:14:21.0
+2018-11-28 17:32:02,539:TRACE http-nio-8090-exec-8 (BaseJdbcLogger.java:165) - <==        Row: 3, 111, 1, 11, null, null, 2018-11-20 17:28:09.0
+2018-11-28 17:32:02,541:DEBUG http-nio-8090-exec-8 (BaseJdbcLogger.java:159) - <==      Total: 3
+2018-11-28 17:32:02,543:DEBUG http-nio-8090-exec-8 (BaseJdbcLogger.java:159) - ==>  Preparing: SELECT id, user_id, user_name, nick_name, phone, email, create_time FROM user WHERE (is_valid = 1 AND user_id = ?) 
+2018-11-28 17:32:02,545:DEBUG http-nio-8090-exec-8 (BaseJdbcLogger.java:159) - ==> Parameters: 111(String)
+2018-11-28 17:32:02,547:TRACE http-nio-8090-exec-8 (BaseJdbcLogger.java:165) - <==    Columns: id, user_id, user_name, nick_name, phone, email, create_time
+2018-11-28 17:32:02,549:TRACE http-nio-8090-exec-8 (BaseJdbcLogger.java:165) - <==        Row: 1, 111, 11, 232fds, null, null, 2018-11-12 15:13:55.0
+2018-11-28 17:32:02,551:TRACE http-nio-8090-exec-8 (BaseJdbcLogger.java:165) - <==        Row: 3, 111, 1, 11, null, null, 2018-11-20 17:28:09.0
+2018-11-28 17:32:02,553:DEBUG http-nio-8090-exec-8 (BaseJdbcLogger.java:159) - <==      Total: 2
+2018-11-28 17:32:02,555:DEBUG http-nio-8090-exec-8 (BaseJdbcLogger.java:159) - ==>  Preparing: select * from user where user_id = ? 
+2018-11-28 17:32:02,556:DEBUG http-nio-8090-exec-8 (BaseJdbcLogger.java:159) - ==> Parameters: 111(String)
+2018-11-28 17:32:02,558:TRACE http-nio-8090-exec-8 (BaseJdbcLogger.java:165) - <==    Columns: id, user_id, user_name, password, nick_name, phone, email, create_time, update_time, create_by, update_by, remarks, is_valid
+2018-11-28 17:32:02,558:TRACE http-nio-8090-exec-8 (BaseJdbcLogger.java:165) - <==        Row: 1, 111, 11, null, 232fds, null, null, 2018-11-12 15:13:55.0, null, null, null, null, 1
+2018-11-28 17:32:02,560:TRACE http-nio-8090-exec-8 (BaseJdbcLogger.java:165) - <==        Row: 3, 111, 1, null, 11, null, null, 2018-11-20 17:28:09.0, null, null, null, null, 1
+2018-11-28 17:32:02,562:DEBUG http-nio-8090-exec-8 (BaseJdbcLogger.java:159) - <==      Total: 2
+2018-11-28 17:33:07,277:DEBUG http-nio-8090-exec-1 (BaseJdbcLogger.java:159) - ==>  Preparing: SELECT id,user_id,user_name,password,nick_name,phone,email,create_time,update_time,create_by,update_by,remarks,is_valid FROM user WHERE id = ? 
+2018-11-28 17:33:07,300:DEBUG http-nio-8090-exec-1 (BaseJdbcLogger.java:159) - ==> Parameters: 1(Integer)
+2018-11-28 17:33:07,315:TRACE http-nio-8090-exec-1 (BaseJdbcLogger.java:165) - <==    Columns: id, user_id, user_name, password, nick_name, phone, email, create_time, update_time, create_by, update_by, remarks, is_valid
+2018-11-28 17:33:07,316:TRACE http-nio-8090-exec-1 (BaseJdbcLogger.java:165) - <==        Row: 1, 111, 11, null, 232fds, null, null, 2018-11-12 15:13:55.0, null, null, null, null, 1
+2018-11-28 17:33:07,319:DEBUG http-nio-8090-exec-1 (BaseJdbcLogger.java:159) - <==      Total: 1

@@ -5,6 +5,7 @@ import com.example.demo.base.ResultUtil;
 import com.example.demo.common.page.PageInfo;
 import com.example.demo.dao.UserMapper;
 import com.example.demo.entity.User;
+import com.example.demo.model.TestParam;
 import com.example.demo.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -57,7 +59,7 @@ public class UserController {
     @ResponseBody
     @ApiOperation("分页用法")
     public Result<User> test2(@RequestParam(value = "page", defaultValue = "1") Integer page,
-                        @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
+                              @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
 
         List<User> list = userService.getList(page, pageSize);
         if (null == list) {
@@ -66,6 +68,14 @@ public class UserController {
             PageInfo<User> pageInfo = new PageInfo<>(list);
             return ResultUtil.getSuccessJson(pageInfo);
         }
+    }
+
+    @PostMapping("/test4")
+    @ResponseBody
+    @ApiOperation("test4")
+    public Result test4(@Valid @RequestBody TestParam param) {
+        System.out.println(1111);
+        return ResultUtil.getSuccessJson();
     }
 
 }

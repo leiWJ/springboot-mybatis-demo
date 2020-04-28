@@ -1,54 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE generatorConfiguration
-        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
-<!--maven命令： mvn mybatis-generator:generate-->
-
 <generatorConfiguration>
-    <!--mysql 连接数据库jar 这里选择自己本地位置-->
-    <classPathEntry location="D:\jar\mysql-connector-java-5.1.40.jar" />
-    <context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat"><!--不生成example--> <!--将MyBatis3Simple换成MyBatis3则生成Simple文件-->
+
+    <!--maven命令： mvn mybatis-generator:generate-->
+
+    <!-- 数据库驱动包位置 (需要根据自己的路径修改)-->
+    <!--<classPathEntry location="D:\localrepository\mysql\mysql-connector-java\5.1.40\mysql-connector-java-5.1.40.jar"/>-->
+    <classPathEntry location="D:\jar\mysql-connector-java-5.1.42.jar" />
+
+    <context id="Tables" targetRuntime="MyBatis3">
         <commentGenerator>
-            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
-            <property name="suppressAllComments" value="true" />
+            <property name="suppressAllComments" value="true"/>
         </commentGenerator>
-        <!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
+
+        <!-- 数据库链接URL、用户名、密码 （定制修改）-->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://127.0.0.1:3306/springboot_demo?serverTimezone=UTC" userId="root"
-                        password="123456">
-        </jdbcConnection>
-        <!-- 默认false，把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer，为 true时把JDBC DECIMAL 和
-           NUMERIC 类型解析为java.math.BigDecimal -->
+                        connectionURL="jdbc:mysql://aliyundev.mysql.zhangbei.rds.aliyuncs.com:3306/zichan360_dms?useUnicode=true&amp;characterEncoding=utf8"
+                        userId="dev_db" password="ABpwKI4mouLi"/>
+
+
+
         <javaTypeResolver>
-            <property name="forceBigDecimals" value="false" />
+            <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
 
-        <!-- targetProject:生成PO类的位置 -->
-        <javaModelGenerator targetPackage="com.example.demo.entity"
+        <!-- 生成模型的包名和位置，实体类 -->
+        <javaModelGenerator targetPackage="com.zichan360.domain.master"
                             targetProject="src/main/java">
-            <!-- enableSubPackages:是否让schema作为包的后缀 -->
-            <property name="enableSubPackages" value="false" />
-            <!-- 从数据库返回的值被清理前后的空格 -->
-            <property name="trimStrings" value="true" />
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
         </javaModelGenerator>
-        <!-- targetProject:mapper映射文件生成的位置
-           如果maven工程只是单独的一个工程，targetProject="src/main/java"
-           若果maven工程是分模块的工程，targetProject="所属模块的名称"，例如：
-           targetProject="ecps-manager-mapper"，下同-->
-        <sqlMapGenerator targetPackage="mapper"
-                         targetProject="src/main/resources">
-            <!-- enableSubPackages:是否让schema作为包的后缀 -->
-            <property name="enableSubPackages" value="false" />
+
+        <!-- 0、生成的映射文件包名和位置，Mapper文件 -->
+        <sqlMapGenerator targetPackage="com.zichan360.mapper.master"
+                         targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
-        <!-- targetPackage：mapper接口生成的位置 -->
-        <javaClientGenerator type="XMLMAPPER"
-                             targetPackage="com.example.demo.dao"
+
+        <!--如果生成注解不需要1和2任选一个，一个注解版，一个Xml版Sql -->
+        <!-- 1、生成DAO的包名和位置，注解Sql文件, 注解版Mapper文件与SqlProvider在一个文件夹-->
+        <javaClientGenerator type="ANNOTATEDMAPPER"
+                             targetPackage="com.zichan360.mapper.master"
                              targetProject="src/main/java">
-            <!-- enableSubPackages:是否让schema作为包的后缀 -->
-            <property name="enableSubPackages" value="false" />
+            <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
-        <!-- 指定数据库表 -->
-        <table schema="mysql" tableName="user"></table>
+
+
+        <table tableName="out_bound_collection" domainObjectName="OutBoundCollection"
+               enableCountByExample="true" enableUpdateByExample="true"
+               enableDeleteByExample="true" enableSelectByExample="true"
+               selectByExampleQueryId="true">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+
+        </table>
 
     </context>
+
 </generatorConfiguration>

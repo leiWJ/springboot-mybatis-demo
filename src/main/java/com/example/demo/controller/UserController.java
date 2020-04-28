@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.aop.annotation.TestAnnotation;
 import com.example.demo.base.Result;
 import com.example.demo.base.ResultUtil;
 import com.example.demo.common.page.PageInfo;
@@ -58,6 +59,7 @@ public class UserController {
     @GetMapping("/test2")
     @ResponseBody
     @ApiOperation("分页用法")
+    @TestAnnotation
     public Result<User> test2(@RequestParam(value = "page", defaultValue = "1") Integer page,
                               @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
 

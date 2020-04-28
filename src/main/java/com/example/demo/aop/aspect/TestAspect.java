@@ -3,6 +3,7 @@ package com.example.demo.aop.aspect;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.aop.annotation.TestAnnotation;
+import com.example.demo.entity.User;
 import com.google.gson.Gson;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -52,7 +53,6 @@ public class TestAspect {
         String uri = request.getRequestURI();
         Object result = pjp.proceed();
 
-
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         Method method = signature.getMethod();
         TestAnnotation testAnnotation = method.getAnnotation(TestAnnotation.class);
@@ -63,6 +63,9 @@ public class TestAspect {
         //请求的方法名
         String className = pjp.getTarget().getClass().getName();
         String methodName = signature.getName();
+        User user=new User();
+        user.setId(2);
+        result=user;
         return result;
     }
 

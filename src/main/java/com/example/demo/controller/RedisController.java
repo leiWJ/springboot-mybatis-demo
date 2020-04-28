@@ -1,9 +1,11 @@
 package com.example.demo.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.example.demo.aop.annotation.TestAnnotation;
 import com.example.demo.base.Result;
 import com.example.demo.base.ResultUtil;
 import com.example.demo.dao.UserMapper;
+import com.example.demo.entity.User;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
 import io.swagger.annotations.Api;
@@ -42,6 +44,15 @@ public class RedisController {
         String value = stringRedisTemplate.opsForValue().get("key");
         //字符串转对象
         Map map = JSON.parseObject(value, Map.class);
+        return ResultUtil.getSuccessJson();
+    }
+
+    User user;
+
+    @GetMapping("/aaa")
+    @TestAnnotation()
+    public Result ssssss() {
+//        System.out.println(user.getId());
         return ResultUtil.getSuccessJson();
     }
 }

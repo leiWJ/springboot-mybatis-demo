@@ -31,16 +31,6 @@ public interface UserMapper extends MyMapper<User> {
 
 
     @SelectProvider(type = getUserListSql.class, method = "getUserListMethod")
-    @Results({
-            @Result(column = "id", property = "id", jdbcType = JdbcType.INTEGER, id = true),
-            @Result(column = "user_id", property = "userId", jdbcType = JdbcType.VARCHAR),
-            @Result(column = "user_name", property = "userName", jdbcType = JdbcType.VARCHAR),
-            @Result(column = "password", property = "password", jdbcType = JdbcType.VARCHAR),
-            @Result(column = "nick_name", property = "nickName", jdbcType = JdbcType.VARCHAR),
-            @Result(column = "phone", property = "phone", jdbcType = JdbcType.VARCHAR),
-            @Result(column = "email", property = "email", jdbcType = JdbcType.VARCHAR),
-            @Result(column = "create_time", property = "createTime", jdbcType = JdbcType.TIMESTAMP)
-    })
     List<User> getUserList(@Param("param1") String param1, @Param("param2") String param2);
 
 

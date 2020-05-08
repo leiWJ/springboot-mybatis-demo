@@ -52,7 +52,8 @@
                enableDeleteByExample="true" enableSelectByExample="true"
                selectByExampleQueryId="true">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-
+            <!--自定义字段类型-->
+           <!-- <columnOverride column = "outer_call_company_ids" typeHandler="com.zichan360.core.handler.JsonTypeHandler"/>-->
         </table>
 
     </context>

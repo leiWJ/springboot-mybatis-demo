@@ -7,7 +7,7 @@
  * 2018/4/27 - JOHN - 创建。
  */
 
-package com.example.demo.config;
+package com.example.demo.common.init;
 
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

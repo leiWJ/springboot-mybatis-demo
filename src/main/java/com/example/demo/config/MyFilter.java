@@ -1,4 +1,4 @@
-package com.example.demo.filter;
+package com.example.demo.config;
 
 import org.springframework.stereotype.Component;
 

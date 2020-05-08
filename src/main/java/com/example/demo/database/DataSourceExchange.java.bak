@@ -1,0 +1,56 @@
+package com.example.demo.database;
+
+import lombok.extern.log4j.Log4j2;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.Signature;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+
+import java.lang.reflect.Method;
+
+/**
+ * 动态切换数据源aop (注意:在添加事务时动态切换不生效)
+ * @author wen
+ * @date 2019/7/16 14:04
+ */
+@Aspect
+@Order(2)
+@Configuration
+@Log4j2
+public class DataSourceExchange {
+
+    @Pointcut("@annotation(com.zichan360.core.database.DataSource)")
+    public void webLog() {
+    }
+
+    /**
+     * 方法结束后
+     */
+    @AfterReturning(returning = "ret", pointcut = "webLog()")
+    public void afterReturning(Object ret) {
+        DynamicDataSource.clearCustomerType();
+        log.debug("数据源已移除！");
+
+    }
+
+    /**
+     * 拦截目标方法，获取由@DataSource指定的数据源标识，设置到线程存储中以便切换数据源
+     */
+    @Before("webLog()")
+    public void before(JoinPoint joinPoint) {
+        Signature signature = joinPoint.getSignature();
+        MethodSignature methodSignature = (MethodSignature) signature;
+        Method method = methodSignature.getMethod();
+        if (method != null) {
+            DataSource dataSource = method.getAnnotation(DataSource.class);
+            DynamicDataSource.setDataSourceType(dataSource.value());
+            log.debug("数据源切换至：" + dataSource.value());
+        }
+
+    }
+}

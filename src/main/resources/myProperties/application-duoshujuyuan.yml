@@ -1,0 +1,75 @@
+server:
+  port: 8090
+  level: development
+  desc: 多数据源模式
+spring:
+  thymeleaf:
+    prefix: classpath:/templates/
+    cache: false
+  datasource:
+    zichan360_billing:
+      url: jdbc:mysql://rm-8vb2s51491c5tci18.mysql.zhangbei.rds.aliyuncs.com:3306/zichan360_billing?tinyInt1isBit=false&zeroDateTimeBehavior=convertToNull&autoReconnect=true
+      username: dev_ams
+      password: GsMUDtTsxbUp
+    zichan360_dms:
+      url: jdbc:mysql://aliyundev.mysql.zhangbei.rds.aliyuncs.com:3306/zichan360_dms?tinyInt1isBit=false&zeroDateTimeBehavior=convertToNull&autoReconnect=true
+      username: dev_db
+      password: ABpwKI4mouLi
+
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    filters: stat
+    maxActive: 20
+    initialSize: 1
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+  redis11:
+    database: 11
+    port: 6379
+    hostName: redis-dev.zichan360.com
+  redis14:
+    database: 14
+    port: 6379
+    hostName: redis-dev.zichan360.com
+
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+    timeout: 5000
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.example.demo.entity
+
+mapper:
+  mappers: com.example.demo.base.MyMapper
+  not-empty: false
+  identity: MYSQL
+
+  #pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+logging:
+  config: classpath:log4j2.yml
+
+
+
+
+

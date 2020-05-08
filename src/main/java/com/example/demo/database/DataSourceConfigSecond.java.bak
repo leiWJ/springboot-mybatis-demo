@@ -1,0 +1,55 @@
+package com.example.demo.database;
+
+import com.alibaba.druid.pool.DruidDataSource;
+import org.apache.ibatis.plugin.Interceptor;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+
+import javax.sql.DataSource;
+
+/**
+ * @author wen
+ * @date 2019/7/16 16:04
+ */
+@Configuration
+@MapperScan(value = {"com.zichan360.mapper.dms", "com.zichan360.maybatis.dms", "com.zichan360.task.migration.masterdb"}, sqlSessionFactoryRef = "dmsSqlSessionFactory")
+public class DataSourceConfigSecond {
+    @Bean("zichan360_dms")
+    public DruidDataSource dataSource(
+            @Value("${spring.datasource.zichan360_dms.url}") String zichan360DmsUrl,
+            @Value("${spring.datasource.zichan360_dms.username}") String zichan360DmsUsername,
+            @Value("${spring.datasource.zichan360_dms.password}") String zichan360DmsPassword,
+            @Qualifier("dmsDataSource") DruidDataSource druidXADataSource) {
+
+        //数据源-zichan360_dms
+//        DruidXADataSource druidXADataSource = DataSourceConfigPrimary.getDruidDataSource();
+        druidXADataSource.setName("zichan360_dms");
+        druidXADataSource.setUrl(zichan360DmsUrl);
+        druidXADataSource.setUsername(zichan360DmsUsername);
+        druidXADataSource.setPassword(zichan360DmsPassword);
+
+        return druidXADataSource;
+    }
+    @Bean(name = "dmsSqlSessionFactory")
+    public SqlSessionFactory masterSqlSessionFactory(@Qualifier("zichan360_dms") DataSource masterDataSource) throws Exception {
+        final SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
+        sessionFactory.setDataSource(masterDataSource);
+        org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
+        configuration.setMapUnderscoreToCamelCase(true);
+        sessionFactory.setConfiguration(configuration);
+        sessionFactory.setPlugins(new Interceptor[]{DataSourceConfigPrimary.pageHelper()});
+        return sessionFactory.getObject();
+    }
+
+    @Bean("txManager_dms")
+    public DataSourceTransactionManager transactionManager(@Qualifier("zichan360_dms") DataSource dataSource) throws Exception {
+        return new DataSourceTransactionManager(dataSource);
+    }
+
+}

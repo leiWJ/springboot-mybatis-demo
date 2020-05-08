@@ -1,0 +1,14 @@
+package com.example.demo.database;
+
+/**
+ * 功能描述: <br>
+ * 〈〉
+ * @Param: 
+ * @Return: 
+ * @Author: wen
+ * @Date: 2020/5/8 17:11
+ */
+public enum DatabaseType {
+    zichan360_billing,
+    zichan360_dms
+}

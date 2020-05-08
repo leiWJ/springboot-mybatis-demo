@@ -1,0 +1,154 @@
+package com.example.demo.config;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.data.redis.cache.RedisCacheConfiguration;
+import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.cache.RedisCacheWriter;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.data.redis.connection.lettuce.LettucePoolingClientConfiguration;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializationContext;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
+
+import java.time.Duration;
+
+/**
+ * 功能描述: <br>
+ * 〈〉redis多数据源
+ * @Param:
+ * @Return:
+ * @Author: wen
+ * @Date: 2020/5/8 17:15
+ */
+@Configuration
+public class StringRedisConfig {
+
+    /**
+     * 配置lettuce连接池
+     * 这里需要配置lettuce连接池–> LettuceConnectionFactory–>RedisTemplate
+     */
+    @Bean
+    @ConfigurationProperties(prefix = "spring.redis.lettuce.pool")
+    public GenericObjectPoolConfig redisPool() {
+        GenericObjectPoolConfig genericObjectPoolConfig = new GenericObjectPoolConfig<>();
+        return genericObjectPoolConfig;
+    }
+
+    /**
+     * 配置第一个数据源的
+     */
+    @Bean
+    @ConfigurationProperties(prefix = "spring.redis")
+    public RedisStandaloneConfiguration redisConfig() {
+        return new RedisStandaloneConfiguration();
+    }
+
+    @Bean
+    @ConfigurationProperties(prefix = "spring.redis11")
+    public RedisStandaloneConfiguration redisConfig11() {
+        return new RedisStandaloneConfiguration();
+    }
+
+    @Bean
+    @ConfigurationProperties(prefix = "spring.redis14")
+    public RedisStandaloneConfiguration redisConfig14() {
+        return new RedisStandaloneConfiguration();
+    }
+
+    /**
+     * 配置第一个数据源的连接工厂
+     * 这里注意：需要添加@Primary 指定bean的名称，目的是为了创建两个不同名称的LettuceConnectionFactory
+     */
+    @Primary
+    @Bean("factory")
+    public LettuceConnectionFactory factory(GenericObjectPoolConfig config, RedisStandaloneConfiguration redisConfig) {
+        LettuceClientConfiguration clientConfiguration = LettucePoolingClientConfiguration.builder().poolConfig(config).build();
+        return new LettuceConnectionFactory(redisConfig, clientConfiguration);
+    }
+
+    @Bean("factory11")
+    public LettuceConnectionFactory factory11(GenericObjectPoolConfig config, RedisStandaloneConfiguration redisConfig11) {
+        LettuceClientConfiguration clientConfiguration = LettucePoolingClientConfiguration.builder().poolConfig(config).build();
+        return new LettuceConnectionFactory(redisConfig11, clientConfiguration);
+    }
+
+    @Bean("factory14")
+    public LettuceConnectionFactory factory14(GenericObjectPoolConfig config, RedisStandaloneConfiguration redisConfig14) {
+        LettuceClientConfiguration clientConfiguration = LettucePoolingClientConfiguration.builder().poolConfig(config).build();
+        return new LettuceConnectionFactory(redisConfig14, clientConfiguration);
+    }
+
+    private RedisTemplate<String, Object> getRedisTemplate() {
+        Jackson2JsonRedisSerializer serializer = new Jackson2JsonRedisSerializer<>(Object.class);
+        ObjectMapper om = new ObjectMapper();
+        // om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        // om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+        // 指定要序列化的域，field,get和set,以及修饰符范围，ANY是都有包括private和public
+        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        om.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        om.registerModule(new JavaTimeModule());
+        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+        serializer.setObjectMapper(om);
+
+        RedisTemplate<String, Object> template = new RedisTemplate<>();
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(serializer);
+        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setHashValueSerializer(serializer);
+        return template;
+    }
+
+    @Primary
+    @Bean("redisTemplate")
+    @ConditionalOnMissingBean(name = "redisTemplate")
+    public RedisTemplate<String, Object> getStringObjectRedisTemplate(@Qualifier("factory") RedisConnectionFactory redisConnectionFactory) {
+        RedisTemplate<String, Object> template = getRedisTemplate();
+        template.setConnectionFactory(redisConnectionFactory);
+        return template;
+    }
+
+    @Primary
+    @Bean("redisTemplate11")
+    @ConditionalOnMissingBean(name = "redisTemplate11")
+    public RedisTemplate<String, Object> getStringObjectRedisTemplate11(@Qualifier("factory11") RedisConnectionFactory redisConnectionFactory) {
+        RedisTemplate<String, Object> template = getRedisTemplate();
+        template.setConnectionFactory(redisConnectionFactory);
+        return template;
+    }
+
+
+    @Primary
+    @Bean("redisTemplate14")
+    @ConditionalOnMissingBean(name = "redisTemplate14")
+    public RedisTemplate<String, Object> getStringObjectRedisTemplate14(@Qualifier("factory14") RedisConnectionFactory redisConnectionFactory) {
+        RedisTemplate<String, Object> template = getRedisTemplate();
+        template.setConnectionFactory(redisConnectionFactory);
+        return template;
+    }
+
+    @Bean
+    public RedisCacheManager redisCacheManager(@Qualifier("redisTemplate14") RedisTemplate redisTemplate14) {
+        RedisCacheWriter redisCacheWriter = RedisCacheWriter.nonLockingRedisCacheWriter(redisTemplate14.getConnectionFactory());
+        RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
+                .entryTtl(Duration.ofSeconds(60L))
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(redisTemplate14.getValueSerializer()))
+                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(redisTemplate14.getKeySerializer()));
+        return new RedisCacheManager(redisCacheWriter, redisCacheConfiguration);
+    }
+
+}

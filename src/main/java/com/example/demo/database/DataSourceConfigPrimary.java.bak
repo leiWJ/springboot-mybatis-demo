@@ -1,0 +1,160 @@
+package com.example.demo.database;
+
+import com.alibaba.druid.pool.DruidDataSource;
+import com.alibaba.druid.pool.xa.DruidXADataSource;
+import com.github.pagehelper.PageInterceptor;
+import lombok.extern.log4j.Log4j2;
+import org.apache.ibatis.plugin.Interceptor;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import javax.sql.DataSource;
+import java.sql.SQLException;
+import java.util.Properties;
+
+/**
+ * @Param:
+ * @Return:
+ * @Author: wen
+ * @Date: 2020/5/8 17:08
+ * 数据源配置
+ */
+@Log4j2
+@Configuration
+@EnableTransactionManagement
+@MapperScan(value = {"com.zichan360.mapper.billing", "com.zichan360.maybatis.mapper", "com.zichan360.maybatis.billing", "com.zichan360.task.migration.amsdb"}, sqlSessionFactoryRef = "primarySqlSessionFactory")
+public class DataSourceConfigPrimary {
+
+    /**
+     * 设置数据源
+     *
+     * @Primary 该注解表示在同一个接口有多个实现类可以注入的时候，默认选择哪一个，而不是让@Aautowire注解报错
+     * @Qualifier 根据名称进行注入，通常是在具有相同的多个类型的实例的一个注入（例如有多个DataSource类型的实例）
+     */
+    @Bean("zichan360_billing")
+    @Primary
+    public DruidDataSource dataSource(
+            @Value("${spring.datasource.zichan360_billing.url}") String zichan360BillingUrl,
+            @Value("${spring.datasource.zichan360_billing.username}") String zichan360BillingUsername,
+            @Value("${spring.datasource.zichan360_billing.password}") String zichan360BillingPassword) {
+
+        log.info("数据库地址{},{},{}", zichan360BillingUrl, zichan360BillingUsername, zichan360BillingPassword);
+        //数据源-zichan360_billing
+        DruidDataSource druidXADataSource = getDruidDataSource();
+        druidXADataSource.setName("zichan360_billing");
+        druidXADataSource.setUrl(zichan360BillingUrl);
+        druidXADataSource.setUsername(zichan360BillingUsername);
+        druidXADataSource.setPassword(zichan360BillingPassword);
+        return druidXADataSource;
+    }
+
+    @Bean(name = "primarySqlSessionFactory")
+    @Primary
+    public SqlSessionFactory masterSqlSessionFactory(@Qualifier("zichan360_billing") DataSource masterDataSource) throws Exception {
+        final SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
+        sessionFactory.setDataSource(masterDataSource);
+        //由于手动创建SQLSessionFactory  所以需要手动设置configuration
+        org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
+        configuration.setMapUnderscoreToCamelCase(true);
+        sessionFactory.setConfiguration(configuration);
+        sessionFactory.setPlugins(new Interceptor[]{pageHelper()});
+        return sessionFactory.getObject();
+    }
+
+    static PageInterceptor pageHelper() {
+        PageInterceptor interceptor = new PageInterceptor();
+        Properties properties = new Properties();
+        //指定分页插件使用哪种方言
+        properties.setProperty("helperDialect", "mysql");
+        //如果 pageSize=0 或者 RowBounds.limit = 0 就会查询出全部的结果
+        properties.setProperty("pageSizeZero", "true");
+        //分页合理化参数  pageNum<=0 时会查询第一页， pageNum>pages（超过总数时），会查询最后一页
+        properties.setProperty("reasonable", "true");
+        //支持通过 Mapper 接口参数来传递分页参数
+        properties.setProperty("supportMethodsArguments", "true");
+        //允许在运行时根据多数据源自动识别对应方言的分页
+        properties.setProperty("autoRuntimeDialect", "true");
+        interceptor.setProperties(properties);
+        return interceptor;
+    }
+
+    @Bean("txManager_billing")
+    public DataSourceTransactionManager transactionManager(@Qualifier("zichan360_billing") DataSource dataSource) throws Exception {
+        return new DataSourceTransactionManager(dataSource);
+    }
+
+
+
+    @Bean(name = "dmsDataSource")
+    public DruidDataSource dmsDataSource() {
+        return getDruidDataSource();
+    }
+
+    @Value("${spring.datasource.min-idle}")
+    private Integer minIdle;
+    @Value("${spring.datasource.max-wait}")
+    private Integer maxWait;
+    @Value("${spring.datasource.initial-size}")
+    private Integer initialSize;
+    @Value("${spring.datasource.max-active}")
+    private Integer maxActive;
+    @Value("${spring.datasource.test-on-borrow}")
+    private Boolean testOnBorrow;
+    @Value("${spring.datasource.test-while-idle}")
+    private Boolean testWhileIdle;
+    @Value("${spring.datasource.test-on-return}")
+    private Boolean testOnReturn;
+    @Value("${spring.datasource.filters}")
+    private String filters;
+    @Value("${spring.datasource.validation-query}")
+    private String validationQuery;
+    @Value("${spring.datasource.pool-prepared-statements}")
+    private Boolean poolPreparedStatements;
+    @Value("${spring.datasource.max-open-prepared-statements}")
+    private Integer maxOpenPreparedStatements;
+    @Value("${spring.datasource.validation-query-timeout}")
+    private Integer validationQueryTimeout;
+    @Value("${spring.datasource.min-evictable-idle-time-millis}")
+    private Integer minEvictableIdleTimeMillis;
+    @Value("${spring.datasource.max-evictable-idle-time-millis}")
+    private Integer maxEvictableIdleTimeMillis;
+    @Value("${spring.datasource.time-between-eviction-runs-millis}")
+    private Integer timeBetweenEvictionRunsMillis;
+    @Value("${spring.datasource.driver-class-name}")
+    private String driverClassName;
+    @Value("${spring.datasource.max-pool-prepared-statement-per-connection-size}")
+    private Integer maxPoolPreparedStatementPerConnectionSize;
+
+    private DruidDataSource getDruidDataSource() {
+        DruidXADataSource druidDataSource = new DruidXADataSource();
+        druidDataSource.setMinIdle(minIdle);
+        druidDataSource.setMaxWait(maxWait);
+        druidDataSource.setInitialSize(initialSize);
+        druidDataSource.setMaxActive(maxActive);
+        druidDataSource.setTestOnBorrow(testOnBorrow);
+        druidDataSource.setTestWhileIdle(testWhileIdle);
+        druidDataSource.setTestOnReturn(testOnReturn);
+        try {
+            druidDataSource.setFilters(filters);
+        } catch (SQLException ignored) {
+        }
+        druidDataSource.setValidationQuery(validationQuery);
+        druidDataSource.setPoolPreparedStatements(poolPreparedStatements);
+        druidDataSource.setMaxOpenPreparedStatements(maxOpenPreparedStatements);
+        druidDataSource.setValidationQueryTimeout(validationQueryTimeout);
+        druidDataSource.setMinEvictableIdleTimeMillis(minEvictableIdleTimeMillis);
+//        druidDataSource.setMaxEvictableIdleTimeMillis(maxEvictableIdleTimeMillis);
+        druidDataSource.setTimeBetweenEvictionRunsMillis(timeBetweenEvictionRunsMillis);
+        druidDataSource.setDriverClassName(driverClassName);
+        druidDataSource.setMaxPoolPreparedStatementPerConnectionSize(maxPoolPreparedStatementPerConnectionSize);
+        return druidDataSource;
+    }
+}

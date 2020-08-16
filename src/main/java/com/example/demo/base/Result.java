@@ -8,7 +8,6 @@ package com.example.demo.base;
  */
 public class Result<T> {
 
-
 	/*
 	 * 0 成功 -1 失败
 	 */

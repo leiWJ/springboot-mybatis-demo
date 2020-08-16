@@ -7,6 +7,8 @@ package com.example.demo.base;
  * @date 2018/4/26
  */
 public class Result<T> {
+
+
 	/*
 	 * 0 成功 -1 失败
 	 */
